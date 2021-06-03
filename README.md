@@ -1,6 +1,6 @@
 # tentekiHeavy
 
-[img src=tentekiss.jpg]
+(https://github.com/vascarpenter/tentekiHeavy/blob/master/tentekiss.jpg)
 - kotlinによる tentekiLiteの移植
   - clickで water/energy/NaClを計算してくれる
   - 複数いれるときに別の物をクリックしないと入れられない
