@@ -5,15 +5,15 @@ data class DrugElement(var mName: String, var mWater: Int, var mEnergy: Int, var
 {
     override fun toString(): String
     {
-        if(mName.startsWith("*"))
+        if (mName.startsWith("*"))
             return mName
 
         return mName + String.format(" (%dml)", mWater)
     }
 }
 
-var drugs : Vector<DrugElement> = Vector<DrugElement>()
-var patdrugs: Vector<DrugElement> = Vector<DrugElement>()
+var drugs: Vector<DrugElement> = Vector<DrugElement>()
+var patients: Vector<DrugElement> = Vector<DrugElement>()
 
 fun main(args: Array<String>)
 {
@@ -26,24 +26,24 @@ fun main(args: Array<String>)
     f.setLocationRelativeTo(null)
     f.isVisible = true
 
-    adddrugs()
+    addDrugs()
 
     g.list1.setListData(drugs)
-    g.list2.setListData(patdrugs)
+    g.list2.setListData(patients)
 
     g.list1.addListSelectionListener {
-        if(it.valueIsAdjusting) return@addListSelectionListener
-        if(g.list1.selectedValue!=null)
+        if (it.valueIsAdjusting) return@addListSelectionListener
+        if (g.list1.selectedValue != null)
             addToPatient(g, g.list1.selectedValue as DrugElement)
     }
     g.list2.addListSelectionListener {
-        if(it.valueIsAdjusting) return@addListSelectionListener
-        if(g.list2.selectedValue!=null)
+        if (it.valueIsAdjusting) return@addListSelectionListener
+        if (g.list2.selectedValue != null)
             removeFromPatient(g, g.list2.selectedValue as DrugElement)
     }
 }
 
-fun adddrugs()
+fun addDrugs()
 {
     drugs.add(DrugElement("*グルコース", 0, 0, 0.0, 0.0))
     drugs.add(DrugElement("10% グルコース", 500, 200, 0.0, 0.0))
@@ -107,44 +107,44 @@ fun adddrugs()
     drugs.add(DrugElement("低分子量デキストラン", 250, 0, 32.5, 1.0))
 }
 
-fun addToPatient(g:gui, drug: DrugElement)
+fun addToPatient(g: gui, drug: DrugElement)
 {
     if (drug.mName.startsWith("*")) return
 
-    patdrugs.add(drug)
-    g.list2.setListData(patdrugs)
+    patients.add(drug)
+    g.list2.setListData(patients)
     refreshParams(g)
 }
 
-fun removeFromPatient(g:gui, drug: DrugElement)
+fun removeFromPatient(g: gui, drug: DrugElement)
 {
-    patdrugs.remove(drug)
-    g.list2.setListData(patdrugs)
+    patients.remove(drug)
+    g.list2.setListData(patients)
     refreshParams(g)
 }
 
 
-fun refreshParams(g:gui)
+fun refreshParams(g: gui)
 {
-    var pt_water = 0
-    var pt_Na=0.0
-    var pt_k=0.0
-    var pt_ene=0
+    var ptWater = 0
+    var ptNa = 0.0
+    var ptK = 0.0
+    var ptEne = 0
 
     // 以前は追加・削除のたびにグローバル変数に＋ーしていたが、この方が遅いが誤差がでなくなる
-    for(i in patdrugs)
+    for (i in patients)
     {
-        pt_water += i.mWater
-        pt_ene += i.mEnergy
-        pt_Na += i.mNa
-        pt_k += i.mK
+        ptWater += i.mWater
+        ptEne += i.mEnergy
+        ptNa += i.mNa
+        ptK += i.mK
     }
 
-    g.waterLabel.text = pt_water.toString()
-    g.eneLabel.text = pt_ene.toString()
-    g.naLabel.text = String.format("%3.1f", pt_Na)
-    g.kLabel.text = String.format("%3.1f", pt_k)
-    g.naclLabel.text = String.format("%3.1f", pt_Na * 16.78 / 1000 * pt_water / 1000)
+    g.waterLabel.text = ptWater.toString()
+    g.eneLabel.text = ptEne.toString()
+    g.naLabel.text = String.format("%3.1f", ptNa)
+    g.kLabel.text = String.format("%3.1f", ptK)
+    g.naclLabel.text = String.format("%3.1f", ptNa * 16.78 / 1000 * ptWater / 1000)
 
     g.list1.repaint()
     g.list2.repaint()
